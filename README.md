@@ -13,7 +13,7 @@ La idea principal es que un cliente pueda explorar el catalogo, seleccionar equi
 - vista de confirmacion y seguimiento demo
 - footer compartido en todas las paginas
 
-## Tecnologias
+## Tecnologias que utilizamos
 Usamos Java y Spring Boot para el backend.
 Usamos React, JavaScript y Vite para el frontend.
 La base de datos prevista es PostgreSQL y mas adelante se trabajara con Docker Compose para levantar el entorno completo.
@@ -41,15 +41,16 @@ docker-compose.yml
 README.md
 
 ## Cambios recientes
-En esta version mejoramos el catalogo para que se vea mas ordenado, mas util y con mas personalidad. Se mantuvo el estilo minimalista, pero ahora aprovecha mejor el espacio, muestra mejor las categorias y presenta mejor los servicios tecnicos.
+En esta version mejoramos el catalogo para que se vea mas ordenado, mas util y con mas personalidad. Se mantuvo con un estilo minimalista, pero ahora aprovechamos mejor el espacio, muestra mejor las categorias y presentamos mejor los servicios tecnicos, tambien nos vamos en los sitios web de IKE, Falabella y Natura para esto.
 
 La seccion Nosotros fue reorganizada y ahora muestra una estructura mas clara. Tambien reemplazamos los numeros por iconos para que la experiencia visual sea mas agradable.
 
 La seccion Contactanos ahora tiene una estructura mas completa, con hero principal, bloque de contacto, informacion comercial, forma de atencion, cobertura y llamada final a la accion.
 
 Tambien dejamos un solo footer compartido para todo el sitio y ajustamos detalles visuales como flechas, botones y tarjetas para que el recorrido sea mas claro.
+Intentamos hacerlo similar al prototipo realizado, pero dandoles los cambios del feedback que nos dio la empresa, asi como cambios que tuvimos pensando durante el desarrollo y que se lo mostraremos a la empresa para que nos den nuestro feedback
 
-## Lo que sigue
+## Lo que nos depara ahora
 - conectar el backend con PostgreSQL
 - guardar solicitudes reales
 - implementar autenticacion y cuentas
