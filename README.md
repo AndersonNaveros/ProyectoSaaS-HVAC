@@ -1,58 +1,90 @@
-# HVAC Solutions V1.3
-HVAC Solutions es nuestro avance academico para un sistema de cotizaciones y seguimiento de equipos y servicios tecnicos de HVAC Controls.
+# HVAC Solutions V1.4 (en desarrollo)
 
-La idea principal es que un cliente pueda explorar el catalogo, seleccionar equipos o servicios, reunirlos en una sola solicitud y enviar una consulta de forma simple. Tambien buscamos dejar una base de trabajo clara para seguir creciendo el proyecto por etapas.
+Estamos construyendo un sistema web para ordenar las cotizaciones de productos y servicios tecnicos de HVAC. Nuestro primer cliente de referencia es HVAC Controls.
 
-## Que se puede probar hoy
-- inicio, catalogo, nosotros y contactanos
-- catalogo con equipos y servicios en una sola vista
-- busqueda, filtros y boton para mostrar mas resultados
-- categorias visuales y bloque destacado para servicios tecnicos
-- formulario de solicitud en tres pasos
-- carrito para reunir productos y servicios
-- vista de confirmacion y seguimiento demo
-- footer compartido en todas las paginas
+En la V1.3 avanzamos el frontend y un modo demo. Ahora en la V1.4 queremos conectar React con Spring Boot y guardar solicitudes en PostgreSQL. Por el momento, el proyecto no esta listo para recibir datos reales de clientes.
 
-## Tecnologias que utilizamos
-Usamos Java y Spring Boot para el backend.
-Usamos React, JavaScript y Vite para el frontend.
-La base de datos prevista es PostgreSQL y mas adelante se trabajara con Docker Compose para levantar el entorno completo.
+## Que usamos
 
-## Como ejecutar la demo
-Desde la carpeta frontend:
+- React, JavaScript y Vite en el frontend
+- Java y Spring Boot en el backend
+- PostgreSQL y Flyway para los datos
+- Docker Compose para iniciar la base local
+- Maven y npm para compilar y ejecutar
+
+## Primero revisamos las herramientas
+
+Abre PowerShell en la carpeta principal del proyecto:
+
+```powershell
+.\scripts\checkEnvironment.ps1
+```
+
+Si falta Docker Desktop, instalalo y comprueba que WSL 2 este disponible. No continuamos con el modo real hasta que Docker Engine este iniciado.
+
+## Iniciamos PostgreSQL
+
+```powershell
+.\scripts\initLocalEnv.ps1
+docker compose up -d db
+docker compose ps
+```
+
+El primer comando crea nuestro archivo .env con una contrasena local aleatoria. No subimos ese archivo a GitHub.
+
+## Ejecutamos el backend
+
+En otra terminal, desde la carpeta principal:
+
+```powershell
+.\scripts\startBackend.ps1
+```
+
+Ese script lee las credenciales de .env e inicia Java en el puerto 8080. Flyway aplica las migraciones cuando la BD esta disponible. Si la BD tarda en iniciar, revisa `docker compose ps` antes de volver a ejecutar Java.
+
+## Probamos la API
+
+En una tercera terminal, desde la raiz:
+
+```powershell
+.\scripts\verifyApi.ps1
+```
+
+Esta prueba crea un registro ficticio en la base local, comprueba el seguimiento y prueba que un reintento no duplique la solicitud. Nunca uses datos reales en estas pruebas.
+
+## Encendemos React
 
 ```powershell
 cd frontend
 npm.cmd install
 npm.cmd run testAll
-npm.cmd run buildDemo
-npm.cmd run devDemo
+npm.cmd run dev
 ```
 
-Luego abrimos en nuestro navegador:
+Abrimos http://127.0.0.1:5173. El comando `dev` usa la API de Java mediante el proxy de Vite. En cambio, `devDemo` usa las respuestas de `demoApi.js` y no necesita base de datos.
 
-http://127.0.0.1:5173/
+Para compilar el frontend:
 
-## Estructura general
+```powershell
+npm.cmd run build
+```
 
-backend/
-frontend/
-docker-compose.yml
-README.md
+Para compilar el backend sin omitir pruebas:
 
-## Cambios recientes
-En esta version mejoramos el catalogo para que se vea mas ordenado, mas util y con mas personalidad. Se mantuvo con un estilo minimalista, pero ahora aprovechamos mejor el espacio, muestra mejor las categorias y presentamos mejor los servicios tecnicos, tambien nos vamos en los sitios web de IKE, Falabella y Natura para esto.
+```powershell
+cd ..\backend
+mvn clean verify
+```
 
-La seccion Nosotros fue reorganizada y ahora muestra una estructura mas clara. Tambien reemplazamos los numeros por iconos para que la experiencia visual sea mas agradable.
+## Lo que cambiamos en esta primera etapa de V1.4
 
-La seccion Contactanos ahora tiene una estructura mas completa, con hero principal, bloque de contacto, informacion comercial, forma de atencion, cobertura y llamada final a la accion.
+Separamos la comunicacion con la API en `apiClient.js`, agregamos pruebas de errores de red, distinguimos el carrito demo del carrito real y ampliamos los registros ficticios de PostgreSQL con una nueva migracion.
 
-Tambien dejamos un solo footer compartido para todo el sitio y ajustamos detalles visuales como flechas, botones y tarjetas para que el recorrido sea mas claro.
-Intentamos hacerlo similar al prototipo realizado, pero dandoles los cambios del feedback que nos dio la empresa, asi como cambios que tuvimos pensando durante el desarrollo y que se lo mostraremos a la empresa para que nos den nuestro feedback
+Tambien dejamos scripts para iniciar el entorno y verificar el flujo completo. Todavia debemos probarlos en Windows 11 con Docker, Maven y PostgreSQL instalados. No damos por validada la integracion hasta que esas pruebas pasen en nuestra PC.
 
-## Lo que nos depara ahora
-- conectar el backend con PostgreSQL
-- guardar solicitudes reales
-- implementar autenticacion y cuentas
-- trabajar el seguimiento real de cotizaciones
-- seguir mejorando la experiencia del SaaS
+## Que sigue
+
+- comprobar todo el flujo React -> API -> PostgreSQL
+- mejorar los mensajes de error y la persistencia real
+- incorporar control de acceso y gestion interna de forma gradual
+- revisar seguridad, permisos y aislamiento antes de publicar el servicio

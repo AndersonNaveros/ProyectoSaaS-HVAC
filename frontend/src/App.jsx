@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { demoApi } from './demoApi.js'
+import { createApiClient } from './apiClient.js'
 import ductsImage from './assets/ventilationDucts.webp'
 import blueprintImage from './assets/technicalPlanning.webp'
 import maintenanceImage from './assets/hvacMaintenance.webp'
@@ -22,7 +22,7 @@ const emptyForm = {
   notes: '',
   preferredContact: 'WHATSAPP',
 }
-const cartKey = 'hvac-demo-cart-v1'
+const cartKey = DEMO_MODE ? 'hvac-demo-cart-v1' : 'hvac-live-cart-v14'
 
 const homeHighlights = [
   { icon: '◔', title: '18 años de trayectoria', text: 'Experiencia profesional aproximada del ingeniero.' },
@@ -125,16 +125,7 @@ function createIdempotencyKey() {
   return crypto.randomUUID()
 }
 
-async function api(path, options = {}) {
-  if (DEMO_MODE) return demoApi(path, options)
-  const response = await fetch(`/api${path}`, {
-    ...options,
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-  })
-  const body = await response.json().catch(() => ({}))
-  if (!response.ok) throw new Error(body.error || 'No se pudo completar la operación.')
-  return body
-}
+const api = createApiClient({ demo: DEMO_MODE })
 
 function pageFromPath(path) {
   return ({
