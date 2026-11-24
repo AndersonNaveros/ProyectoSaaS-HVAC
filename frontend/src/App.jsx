@@ -8,6 +8,7 @@ import CatalogPage from './components/CatalogPage.jsx'
 import AboutPage from './components/AboutPage.jsx'
 import ContactPage from './components/ContactPage.jsx'
 import ArrowIcon from './components/ArrowIcon.jsx'
+import AuthPortal from './components/AuthPortal.jsx'
 
 const DEMO_MODE = import.meta.env.MODE === 'demo'
 
@@ -128,6 +129,7 @@ function createIdempotencyKey() {
 const api = createApiClient({ demo: DEMO_MODE })
 
 function pageFromPath(path) {
+  if (path === '/cuenta' || path.startsWith('/panel/')) return 'account'
   return ({
     '/': 'home',
     '/catalogo': 'catalog',
@@ -187,6 +189,7 @@ function ErrorNotice({ children }) {
 
 export default function App() {
   const [page, setPage] = useState(pageFromPath(window.location.pathname))
+  const [authUser, setAuthUser] = useState(null)
   const [items, setItems] = useState([])
   const [loadingItems, setLoadingItems] = useState(true)
   const [catalogError, setCatalogError] = useState('')
@@ -255,6 +258,7 @@ export default function App() {
       cart: '/solicitud',
       done: '/solicitud/confirmada',
       tracking: '/seguimiento',
+      account: '/cuenta',
     })[view] || '/'
 
     if (window.location.pathname !== newPath) history.pushState({}, '', newPath)
@@ -353,13 +357,19 @@ export default function App() {
               </button>
             ))}
           </nav>
-          <button className="cart-header" type="button" onClick={followCart}>
-            Mi solicitud <span className="count">{totalQuantity}</span>
-          </button>
+          <div className="header-user-actions">
+            <button className="cart-header" type="button" onClick={followCart}>
+              Mi solicitud <span className="count">{totalQuantity}</span>
+            </button>
+            <button className="cart-header header-account-btn" type="button" onClick={() => navigate('account')}>
+              {authUser ? 'Mi espacio' : 'Iniciar sesión'} <Arrow size={17}/>
+            </button>
+          </div>
         </div>
       </header>
 
       <main className="site-main">
+        {page === 'account' && <AuthPortal onPublic={goHome} onAuthChange={setAuthUser}/>}
         {page === 'home' && (
           <>
             <section className="hero hero-public">

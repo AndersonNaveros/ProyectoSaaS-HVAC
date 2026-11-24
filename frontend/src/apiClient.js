@@ -8,9 +8,10 @@ export function createApiClient({ demo = false, fetchImpl = fetch, demoImpl = de
 
     let response
     try {
+      const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('hvacSessionToken') : null
       response = await fetchImpl(`/api${path}`, {
         ...options,
-        headers: { 'Content-Type': 'application/json', ...options.headers },
+        headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers },
       })
     } catch {
       throw new Error('No hay conexion con la API. Comprueba que Spring Boot este encendido.')

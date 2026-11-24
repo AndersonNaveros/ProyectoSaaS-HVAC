@@ -6,6 +6,7 @@ import officeImage from '../assets/officeEnvironment.webp'
 import maintenanceImage from '../assets/hvacMaintenance.webp'
 import { catalogCategories, filterCatalog } from '../catalogUtils.js'
 import ArrowIcon from './ArrowIcon.jsx'
+import { inferMediaKey } from '../catalogMedia.js'
 
 function Arrow(props) { return <ArrowIcon {...props} /> }
 function Info({ children }) { return <div className="info"><span aria-hidden="true">ⓘ</span><span>{children}</span></div> }
@@ -28,7 +29,7 @@ const serviceImages = {
 }
 
 function CatalogMedia({ item, large = false }) {
-  const key = item.mediaKey || ''
+  const key = inferMediaKey(item)
   const name = item.name || 'Equipo o servicio'
   const classes = `catalog-visual ${large ? 'catalog-visual-large' : ''}`
 

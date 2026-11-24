@@ -5,5 +5,6 @@ import './globalStyles.css'
 import './catalogPage.css'
 import './aboutPage.css'
 import './contactPage.css'
+import './portalStyles.css'
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>)

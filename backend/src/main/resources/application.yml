@@ -16,3 +16,8 @@ server:
 app:
   allowed-origin: ${FRONTEND_ORIGIN:http://localhost:5173}
   tracking-ttl-days: ${TRACKING_TTL_DAYS:30}
+  bootstrap:
+    admin-email: ${BOOTSTRAP_ADMIN_EMAIL:}
+    admin-password: ${BOOTSTRAP_ADMIN_PASSWORD:}
+    developer-email: ${BOOTSTRAP_DEVELOPER_EMAIL:}
+    developer-password: ${BOOTSTRAP_DEVELOPER_PASSWORD:}

@@ -1,0 +1,58 @@
+HVAC Solutions V1.4 - Paneles por rol
+
+Esta ampliacion agrega un recorrido interactivo del cliente, administrador,
+trabajador y proveedor SaaS sin cambiar los endpoints existentes de Spring Boot.
+
+COMO INSTALAR LA ACTUALIZACION
+
+1. En VS Code verifica que estes en la rama develop/v1.4.
+2. Guarda tus cambios actuales antes de aplicar esta ampliacion.
+3. Copia las carpetas frontend y scripts del ZIP dentro del repositorio.
+   Reemplaza solo los archivos indicados si VS Code lo solicita.
+4. Desde la carpeta principal del repositorio, abre una terminal:
+
+   .\scripts\startFrontend.ps1
+
+   Si es la primera ejecucion, se instala Vite con npm.
+   Para iniciar Spring Boot en otra terminal:
+
+   .\scripts\startBackend.ps1
+
+5. Abre http://127.0.0.1:5173/
+6. Pulsa Plataforma para recorrer los perfiles o Mi cuenta para el cliente.
+
+RUTA DE PRESENTACION PARA EL PROFESOR
+
+1. Catalogo: busca productos y servicios; prueba el carrito.
+2. Mi cuenta: muestra solicitudes, trabajos, documentos y crea un perfil local.
+3. Plataforma > Administrador: abre Inventario, modifica el stock con motivo.
+4. Administrador > Clientes: registra un contacto ficticio.
+5. Administrador > Agenda: programa una atencion y asigna a un trabajador.
+6. Administrador > Trabajadores: cambia el rol de un trabajador.
+7. Administrador > Roles y permisos: quita o concede un permiso.
+8. Plataforma > Trabajador: verifica que el modulo cambie segun sus permisos.
+9. Trabajador > Mis trabajos: registra observaciones y genera un informe TXT.
+10. Plataforma > Desarrollador: revisa empresas y la arquitectura prevista.
+
+PARA SABER QUE FUNCIONA REALMENTE
+
+- El catalogo publico y el flujo de solicitud real siguen usando Spring Boot
+  y PostgreSQL si inicias el servidor y ejecutas npm run dev.
+- Los paneles internos permiten navegar, crear registros de ejemplo,
+  ajustar stock, actualizar estados, asignar trabajadores, modificar permisos
+  y descargar informes TXT. Estos datos se guardan en localStorage.
+- Las nuevas pantallas NO autentican usuarios, NO crean cuentas reales y
+  NO autorizan operaciones en Java. El backend conserva sus reglas restrictivas.
+- El panel del administrador no consulta ni modifica solicitudes de PostgreSQL.
+  Es una vista interactiva para validar la estructura del sistema.
+- Para una version productiva falta crear el login en Java, sesiones,
+  RBAC multiempresa, endpoints privados y persistencia de los modulos.
+
+PRUEBAS DEL FRONTEND
+
+   cd .\frontend
+   npm.cmd install
+   npm.cmd run testAll
+   npm.cmd run build
+
+Si ves que vite no se reconoce, ejecuta npm.cmd install en frontend.

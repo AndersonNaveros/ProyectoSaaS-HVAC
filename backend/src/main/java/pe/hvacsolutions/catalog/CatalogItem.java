@@ -18,6 +18,9 @@ public class CatalogItem {
     private String category;
     @Column(nullable = false)
     private boolean active;
+    @Column(name="company_id", nullable=false)
+    private Long companyId;
+    @Column(name="brand_name") private String brandName;
 
     protected CatalogItem() {}
     public Long getId() { return id; }
@@ -27,4 +30,6 @@ public class CatalogItem {
     public String getSummary() { return summary; }
     public String getCategory() { return category; }
     public boolean isActive() { return active; }
+    public Long getCompanyId() { return companyId; }
+    public String getBrandName() { return brandName; }
 }

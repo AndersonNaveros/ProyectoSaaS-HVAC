@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
+import pe.hvacsolutions.portal.PortalPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,13 +23,15 @@ public class QuotationRequestService {
     private final QuotationRequestRepository requests;
     private final CatalogRepository catalog;
     private final TokenService tokens;
+    private final JdbcTemplate jdbc;
     private final int ttlDays;
 
     public QuotationRequestService(QuotationRequestRepository requests, CatalogRepository catalog,
-                                   TokenService tokens, @Value("${app.tracking-ttl-days:30}") int ttlDays) {
+                                   TokenService tokens, JdbcTemplate jdbc, @Value("${app.tracking-ttl-days:30}") int ttlDays) {
         this.requests = requests;
         this.catalog = catalog;
         this.tokens = tokens;
+        this.jdbc = jdbc;
         this.ttlDays = ttlDays;
     }
 
@@ -57,11 +62,16 @@ public class QuotationRequestService {
         );
         for (var line : data.lines()) {
             CatalogItem item = catalog.findById(line.catalogItemId())
-                .filter(CatalogItem::isActive)
+                .filter(i -> i.isActive() && Long.valueOf(1).equals(i.getCompanyId()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Producto o servicio no disponible"));
             saved.addLine(new QuotationRequestLine(item, line.quantity()));
         }
         requests.saveAndFlush(saved);
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof PortalPrincipal principal && principal.companyId()==1) {
+            jdbc.update("UPDATE quotation_requests SET customer_id=?,company_id=? WHERE code=?",
+                principal.id(), principal.companyId(), code);
+        }
         return new CreatedRequest(code, trackingToken, saved.getTrackingExpiresAt(), false, whatsappText(saved));
     }
 
