@@ -1,6 +1,6 @@
 HVAC Solutions V1.4 - Espacios de trabajo
 
-Estamos desarrollando una plataforma web para HVAC Controls. Esta version mantiene el sitio publico de la V1.3 y agrega cuentas, paneles separados y datos persistentes con PostgreSQL.
+Estamos desarrollando una plataforma web para HVAC Controls. Esta version mantiene el sitio publico de la V1.4 y agrega cuentas, paneles separados y datos persistentes con PostgreSQL.
 
 Un visitante puede consultar el catalogo y solicitar una cotizacion sin cuenta. Si se registra desde Mi cuenta, obtiene automaticamente el rol Cliente. Los trabajadores y administradores ingresan con cuentas creadas por un administrador de la empresa. El responsable de plataforma usa una cuenta de desarrollador distinta.
 
